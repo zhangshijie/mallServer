@@ -6,7 +6,9 @@ var productSchema = new schema({
     "productName": String,
     "salePrice": Number,
     "productImage": String,
-    "productUrl": String
+    "productUrl": String,
+    "checked": String,
+    "productNum": String
 });
 
 
