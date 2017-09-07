@@ -24,12 +24,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.all('*', (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", 'http://localhost:8089');
+    res.header('Access-Control-Allow-Credentials', 'true');
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
     res.header("X-Powered-By", ' 3.2.1')
     res.header("Content-Type", "application/json;charset=utf-8");
     next();
+});
+
+app.use((req, res, next) => {
+    if (req.cookies.userId) {
+        next()
+    } else {
+        if (req.originalUrl == '/users/login' || req.originalUrl == '/users/logout' || req.originalUrl == '/users/checkLogin' || req.path == '/goods/list') {
+            next();
+        } else {
+            res.json({
+                status: '10001',
+                msg: '未登录',
+                result: ''
+            })
+        }
+    }
 });
 app.use('/', index);
 app.use('/users', users);

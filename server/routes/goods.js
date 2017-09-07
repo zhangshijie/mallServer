@@ -17,7 +17,7 @@ mongoose.connection.on("disconected", () => {
 });
 
 
-router.get("/", (req, res, next) => {
+router.get("/list", (req, res, next) => {
     let page = parseInt(req.param("page"));
     let pageSize = parseInt(req.param("pageSize"));
     let priceLevel = req.param("priceLevel");
