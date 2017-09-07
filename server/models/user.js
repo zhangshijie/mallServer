@@ -15,4 +15,4 @@ var userSchema = new mongooose.Schema({
     "addressList": Array
 });
 
-module.exports = mongooose.model("User", userSchema, "Users");
+module.exports = mongooose.model("User", userSchema, "users");
