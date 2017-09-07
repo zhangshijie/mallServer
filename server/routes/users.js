@@ -29,9 +29,11 @@ router.post("/login", (req, res, next) => {
                 });
                 // req.session.header = user;
                 res.json({
-                    status: "1",
-                    msg: err.message,
-                    result: doc.userName
+                    status: "0",
+                    msg: "",
+                    result: {
+                        userName: doc.userName
+                    }
                 })
             }
         }
