@@ -76,7 +76,7 @@ router.get("/list", (req, res, next) => {
 
 //加入购物车
 router.get("/addCart", (req, res, next) => {
-    var userId = '100000077';
+    var userId = '100000079';
     var productId = req.query.productId;
     var User = require("../models/user");
 
@@ -111,7 +111,6 @@ router.get("/addCart", (req, res, next) => {
                             });
                         }
                     });
-
                 } else {
                     Goods.findOne({ productId: productId }, (err, doc) => {
                         if (err) {
