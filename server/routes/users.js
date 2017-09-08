@@ -68,8 +68,8 @@ router.post("/logout", (req, res, next) => {
 });
 
 router.get("/checkLogin", (req, res, next) => {
-    console.log('进来checkLogin了')
-    console.log(req.cookies);
+    // console.log('进来checkLogin了')
+    // console.log(req.cookies);
     if (req.cookies.userId) {
         res.json({
             status: '0',
@@ -108,5 +108,30 @@ router.get("/cartList", (req, res, next) => {
     });
 });
 
+router.post("/cart/del", (req, res, next) => {
+    var userId = req.cookies.userId,
+        productId = req.body.productId;
+    User.update({ userId: userId }, {
+        $pull: {
+            'cartList': {
+                'productId': productId
+            }
+        }
+    }, (err, doc) => {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            res.json({
+                status: '0',
+                msg: '',
+                result: 'suc'
+            });
+        }
+    });
+});
 
 module.exports = router;
