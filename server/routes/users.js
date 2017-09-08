@@ -134,4 +134,54 @@ router.post("/cart/del", (req, res, next) => {
     });
 });
 
+// router.post("/cart/edit", (req, res, next) => {
+//     var userId = req.cookies.userId,
+//         productId = req.body.productId,
+//         productNum = req.body.productNum;
+//     User.update({"userId": userId, "cartList.productId": productId}, {
+//         "cartList.$.productNum": productNum
+//     }, (err, doc) => {
+//         if (err) {
+//             res.json({
+//                 status: '1',
+//                 msg: err.message,
+//                 result: ''
+//             });
+//         } else {
+//             res.json({
+//                 status: '0',
+//                 msg: '',
+//                 result: 'suc'
+//             });
+//         }
+//     });
+// });
+
+router.post("/cart/edit", function(req, res, next) {
+    var userId = req.cookies.userId,
+        productId = req.body.productId,
+        productNum = req.body.productNum,
+        checked = req.body.checked;
+    console.log("服务端收到productNum")
+    console.log(productNum)
+    User.update({ "userId": userId, "cartList.productId": productId }, {
+        "cartList.$.productNum": productNum,
+        "cartList.$.checked": checked,
+    }, function(err, doc) {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            res.json({
+                status: '0',
+                msg: '',
+                result: 'suc'
+            });
+        }
+    })
+});
+
 module.exports = router;
