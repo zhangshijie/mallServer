@@ -162,4 +162,42 @@ router.post("/cart/edit", function(req, res, next) {
     })
 });
 
+router.post("/editCheckAll", (req, res, next) => {
+
+    var userId = req.cookies.userId,
+        checkAll = req.body.checkAll ? '1' : '0';
+    User.findOne({ "userId": userId }, (err, doc) => {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            if (doc) {
+                doc.cartList.forEach((item) => {
+                    item.checked = checkAll;
+                });
+                doc.save((err, doc) => {
+                    if (err) {
+                        res.json({
+                            status: '1',
+                            msg: err.message,
+                            result: ''
+                        });
+
+                    } else {
+                        res.json({
+                            status: '0',
+                            msg: '',
+                            result: doc
+                        });
+                    }
+                })
+
+            }
+
+        }
+    });
+});
 module.exports = router;
