@@ -223,4 +223,49 @@ router.get("/addressList", (req, res, next) => {
 
     });
 });
+
+router.post("/setDefaultAddress", (req, res, next) => {
+
+    var userId = req.cookies.userId,
+        addressId = req.body.addressId;
+    if (!addressId) {
+        res.json({
+            status: '1003',
+            msg: 'addressid is null',
+            result: ''
+        })
+    }
+    User.findOne({ "userId": userId }, (err, doc) => {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            if (doc) {
+                doc.addressList.forEach((item) => {
+                    item.isDefault = item.addressId == addressId;
+                });
+                doc.save((err, doc) => {
+                    if (err) {
+                        res.json({
+                            status: '1',
+                            msg: err.message,
+                            result: ''
+                        });
+
+                    } else {
+                        res.json({
+                            status: '0',
+                            msg: '',
+                            result: doc
+                        });
+                    }
+                })
+            }
+        }
+    });
+});
+
 module.exports = router;
