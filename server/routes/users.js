@@ -268,4 +268,32 @@ router.post("/setDefaultAddress", (req, res, next) => {
     });
 });
 
+router.post("/delAddress", (req, res, next) => {
+    var userId = req.cookies.userId,
+        addressId = req.body.addressId;
+    User.update({
+        userId: userId
+    }, {
+        $pull: {
+            'addressList': {
+                'addressId': addressId
+            }
+        }
+    }, (err, doc) => {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            res.json({
+                status: '0',
+                msg: '',
+                result: ''
+            });
+        }
+    });
+});
+
 module.exports = router;
