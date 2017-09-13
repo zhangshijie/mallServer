@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var User = require('./../models/user')
+var User = require('./../models/user');
+require('./../util/utils');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -291,6 +292,66 @@ router.post("/delAddress", (req, res, next) => {
                 status: '0',
                 msg: '',
                 result: ''
+            });
+        }
+    });
+});
+
+router.post("/pay", (req, res, next) => {
+    var userId = req.cookies.userId,
+        orderTotal = req.body.orderTotal,
+        addressId = req.body.addressId;
+    User.findOne({ "userId": userId }, (err, doc) => {
+        if (err) {
+            res.json({
+                status: '1',
+                msg: err.message,
+                result: ''
+            });
+        } else {
+            let address = '',
+                goodlist = [];
+            doc.addressList.filter((item) => {
+                if (item.addressId == addressId) {
+                    addresss = item;
+                }
+            });
+            doc.cartList.filter((item) => {
+                if (item.checked == 1) {
+                    goodlist.push(item);
+                }
+            });
+
+            let platform = '633'
+            let r1 = Math.floor(Math.random() * 10);
+            let r2 = Math.floor(Math.random() * 10);
+
+            let sysDate = new Date().Format('yyyyMMddhhmmss');
+            let createDate = new Date().Format('yyyy-MM-dd hh:mm:ss');
+            let orderId = platform + sysDate + r2;
+
+            let orderInfo = {
+                orderId: orderId,
+                addressinfo: address,
+                goodlist: goodlist,
+                status: '1',
+                createDate: ''
+            }
+
+            doc.orderList.push(orderInfo);
+            doc.save((err2, doc) => {
+                if (err2) {
+                    res.json({
+                        status: "1",
+                        msg: err2.message
+                    })
+                } else {
+                    res.json({
+                        status: "0",
+                        msg: '',
+                        result: 'suc'
+                    });
+                }
             });
         }
     });
